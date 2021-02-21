@@ -85,7 +85,7 @@ router.patch("/changePassword",async (req,res)=>{
         let client = await mongoClient.connect(dbURL,{useUnifiedTopology:true})
         let db = client.db("login-reg-db")
         let user = await db.collection("users").findOne({resetPasswordToken: {$exists:req.body.token}})
-        if(!user) { throw new Error("User not found. Check the reset token") }
+        if(!user) { throw new Error("User not found") }
         if(user.resetPasswordExpires>=Date.now()){
             let hashPwd = bcrypt.hashSync(req.body.password,10)
             await db.collection("users").updateOne({resetPasswordToken: {$exists:req.body.token}},
