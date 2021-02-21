@@ -5,7 +5,12 @@ const port = process.env.PORT || 5000
 
 const app = express()
 
-app.use(cors())
+const corsOptions = {
+    origin: 'https://login-reg-app.netlify.app/',
+    optionsSuccessStatus: 200 // For legacy browser support
+}
+app.use(cors(corsOptions))
+
 app.use(express.json())
 app.use("/",express.static("public"))
 
