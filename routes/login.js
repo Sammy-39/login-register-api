@@ -1,5 +1,6 @@
 const express = require("express")
 const bcrypt = require("bcryptjs")
+const {createJWT} = require("../modules/genJWT")
 
 const mongodb = require("mongodb")
 const mongoClient = mongodb.MongoClient
@@ -14,8 +15,14 @@ router.post("/login", async (req,res)=>{
         let user = await db.collection("users").findOne({"email":req.body.email})
 
         if(user && bcrypt.compareSync(req.body.password,user.password)){
+            
+            let token = createJWT({id:user["_id"],role:user["role"]})
+            
+            client.close()
             res.status(200).json({
-                message : "Login Success"
+                message : "Login Success",
+                token,
+                role: user["role"]
             })
         }
         else{

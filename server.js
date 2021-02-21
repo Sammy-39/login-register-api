@@ -11,9 +11,11 @@ app.use("/",express.static("public"))
 
 const loginRouter = require("./routes/login")
 const registerRouter = require("./routes/register")
+const userRouter = require("./routes/users")
 
 app.use("/api",loginRouter)
 app.use("/api",registerRouter)
+app.use("/api",userRouter)
 
 app.listen(port,()=>{
     console.log("Server running on: http://localhost:"+port)

@@ -7,23 +7,6 @@ const dbURL = `mongodb://sammy:sammydb@cluster0-shard-00-00.pvarl.mongodb.net:27
 
 const router = express.Router()
 
-router.get("/users", async (req,res)=>{
-    try{
-        let client = await mongoClient.connect(dbURL,{useUnifiedTopology: true})
-        let db = client.db("login-reg-db")
-
-        let users = await db.collection("users").find().toArray()
-
-        res.status(200).json(users)
-    }
-    catch(err){
-        res.status(400).json({
-            message: err.message
-        })
-    }
-
-})
-
 router.post("/register",async (req,res)=>{
     try{
         let client = await mongoClient.connect(dbURL,{useUnifiedTopology: true})
@@ -39,6 +22,7 @@ router.post("/register",async (req,res)=>{
 
         await db.collection("users").insertOne(req.body)
 
+        client.close()
         res.status(200).json({
             message: "Registered Successfully"
         })
